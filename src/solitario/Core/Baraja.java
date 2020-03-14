@@ -5,13 +5,22 @@
  */
 package solitario.Core;
 
-
 public class Baraja {
-	
-	
-		
-	
-	
-	
-	
+    
+    private Carta top;
+    
+    public Baraja(){
+        top = null;
+    }
+    
+    public Carta peek(){
+        return top;
+    }
+    
+    public Carta pop(){
+        Carta actual = top;
+        top = top.getSig();
+        return actual;
+    }
+    
 }
