@@ -1,36 +1,23 @@
 /*
  * Representa una carta, formada por un número y su palo correspondiente
  */
+
 package solitario.Core;
 
 /**
- *
  * @author AEDI
+ * @author Iago Barreiro Río
  */
-public class Carta{
+public class Carta {
     
-    private int num;
     private Palos palo;
-    private Carta siguiente;
+    private int numero;    
 
-    public Carta(int num, Palos palo, Carta siguiente){
-        this.num = num;
+    public Carta(Palos palo, int numero){
         this.palo = palo;
-        this.siguiente = siguiente;
-    }
-
-    public int getNum() {
-        return num;
-    }
-    public Palos getPalo() {
-        return palo;
-    }
-    public Carta getSig() {
-        return siguiente;
+        this.numero = numero;
     }
     
-    public void setSig(Carta siguiente) {
-        this.siguiente = siguiente;
-    }
+    // Añadir solamente getters [no setters] para implementar correctamente el método toString()
 
 }
