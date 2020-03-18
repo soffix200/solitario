@@ -6,7 +6,8 @@
 
 package solitario.Core;
 
-import java.util.Random; // ¿Usar en shuffle?
+import java.util.Collections;
+import java.util.Stack;
 
 /**
  * @author AEDI
@@ -14,19 +15,34 @@ import java.util.Random; // ¿Usar en shuffle?
  */
 public class Baraja {
     
+    private Stack<Carta> cartas;
+    
     public Baraja(){
-        
-        //Crear una baraja española ordenada
-        
-        shuffle();
-        
+        for(Palos palo : Palos.values()){
+            for (int i = 0; i < 8; i++){
+                try {
+                    cartas.add(new Carta(palo, i));
+                } catch (Exception exc) {
+                    System.err.println("ERROR: " + exc.getMessage());
+                }
+            }
+            for (int i = 10; i < 13; i++){
+                try {
+                    cartas.add(new Carta(palo, i));
+                } catch (Exception exc) {
+                    System.err.println("ERROR: " + exc.getMessage());
+                }
+            }
+        }
+        Collections.shuffle(cartas); // Pensar en método más ortodoxo
     }
     
-    private void shuffle(){
-        
-        // Método que desordena aleatoriamente la baraja
-        // ¿Utilizar Random?
-        
+    public boolean esVacia(){
+        return cartas.isEmpty();
+    }
+    
+    public Carta popCarta(){
+        return cartas.pop();
     }
     
 }

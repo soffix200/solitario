@@ -19,18 +19,51 @@ public class Jugador {
     public Jugador() {
         mesa = new Mesa();
     }
+    
+    public void startMesa() {
+        Baraja baraja = new Baraja();
+        for (int i = 0; i < 40; i++){
+            // Disponer cartas en mesa según enunciado
+            // empaceCard(baraja.popCarta(), mesa.getMonton**(**))
+        }
+    }
 
     public Mesa getMesa() {
         return mesa;
     }
     
-    public void moveCard(Stack<Carta> origin, Stack<Carta> destination){
+    public void emplaceCard(Carta carta, Stack<Carta> destination){
+        destination.push(carta);
+    }
+    
+    public void moveCard(Stack<Carta> origin, Stack<Carta> destination){ // @victor
+        // Decide si invocar a moveCardIn() o moveCardOut()
+    }
+    
+    public void moveCardIn(Stack<Carta> origin, Stack<Carta> destination){ // @victor
+        /*
         try{
+            // if carta can be placed in destination
+            if (destination.peek().getNumero()+1 == origin.peek())
             destination.push(origin.peek());
         } catch (Exception exc){
             System.err.println("La carta no se pudo mover: " + exc.getMessage());
         }
         origin.pop();
+        */
+    }
+    
+    public void moveCardOut(Stack<Carta> origin, Stack<Carta> destination){ // @victor
+        /*
+        try{
+            // if carta can be placed in destination
+            if (destination.peek().getNumero()+1 == origin.peek())
+            destination.push(origin.peek());
+        } catch (Exception exc){
+            System.err.println("La carta no se pudo mover: " + exc.getMessage());
+        }
+        origin.pop();
+        */
     }
     
     public Stack selectOrigin() throws Exception {

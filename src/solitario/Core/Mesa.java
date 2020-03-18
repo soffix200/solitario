@@ -41,21 +41,37 @@ public class Mesa {
         
     }
     
-    public Stack getMonton(/* Indice del montón */) throws Exception {
-        
-        // Es necesario indexar de alguna manera sencilla los montones, para saber fácilmente a cuál es necesario acceder
-        //  -> Pensar en algo XD
-        
-        // Lanza Excption("Wrong hole") si el montón objetivo no es válido
-        
-        return new Stack<Carta>(); // TEMPORAL, PARA QUE NO SE QUEJE NETBEANS, ESTÁ SIN IMPLEMENTAR; BORRAR EN CUANTO IMPLEMENTADO
+    public Stack getMontonInterior(int i, int j) throws Exception {
+        if (i >= montonesInteriores.length || i < 0 || j >= montonesInteriores[0].length || j < 0) {
+            throw new Exception("Posicion invalida");
+        }
+        return montonesInteriores[i][j];
+    }
+
+    public Stack getMontonExterior(int i) throws Exception {
+        if (i >= montonesExteriores.length || i < 0) {
+            throw new Exception("Posicion invalida");
+        }
+        return montonesExteriores[i];
     }
     
-    public String toString(){
+    public String toString() { // Hacer cosa más visual que esta vaina
         StringBuilder toret = new StringBuilder();
-        
-        // NO SE DETALLA; DEMASIADO COMPLEJO
-        
+
+        toret.append("Monton Exterior:\n");
+
+        for (int i = 0; i < montonesExteriores.length; i++) {
+            toret.append(montonesExteriores[i].toString()).append("    ");
+        }
+
+        toret.append("\nMonton Interior:\n");
+
+        for (int i = 0; i < montonesInteriores.length; i++) {
+            for (int j = 0; j < montonesInteriores[i].length; j++) {
+                toret.append(montonesInteriores[i][j]).append("\t");
+            }
+            toret.append("\n");
+        }
         return toret.toString();
     }
     
