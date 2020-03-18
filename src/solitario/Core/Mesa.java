@@ -32,12 +32,15 @@ import java.util.Stack;
  */
 public class Mesa {
     
-    private Stack<Carta> [][] montonesInteriores;
-    private Stack<Carta> [] montonesExteriores;
+    private Stack<Carta>[][] montonesInteriores;
+    private Stack<Carta>[] montonesExteriores;
     
     public Mesa(){
         
-        // NO SE DETALLA; DEMASIADO COMPLEJO
+        montonesInteriores = new Stack[4][4];
+        montonesExteriores = new Stack[Palos.values().length];
+        
+        // NO SE DETALLA Distribución de cartas en mes [montonerExteriores]; DEMASIADO COMPLEJO
         
     }
     
@@ -47,12 +50,30 @@ public class Mesa {
         }
         return montonesInteriores[i][j];
     }
+    
+    public int getInnerCardCount(){
+        int toret = 0;
+        for (Stack<Carta>[] filaMontones : montonesInteriores){
+            for (Stack<Carta> monton : filaMontones){
+                toret += monton.size();
+            }
+        }
+        return toret;
+    }
 
     public Stack getMontonExterior(int i) throws Exception {
         if (i >= montonesExteriores.length || i < 0) {
             throw new Exception("Posicion invalida");
         }
         return montonesExteriores[i];
+    }
+    
+    public int getOutterCardCount() {
+        int toret = 0;
+        for (Stack<Carta> monton : montonesExteriores) {
+            toret += monton.size();
+        }
+        return toret;
     }
     
     public String toString() { // Hacer cosa más visual que esta vaina

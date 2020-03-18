@@ -18,6 +18,7 @@ public class Baraja {
     private Stack<Carta> cartas;
     
     public Baraja(){
+        cartas = new Stack<>();
         for(Palos palo : Palos.values()){
             for (int i = 0; i < 8; i++){
                 try {

@@ -25,7 +25,7 @@ public class Solitario {
             System.out.println(player.getMesa());
             try {
                 player.moveCard(player.selectOrigin(), player.selectDestination());
-                evaluateGame();
+                evaluateGame(player);
             } catch (Exception exc){
                 System.err.println("ERROR: " + exc.getMessage());
             }
@@ -37,15 +37,19 @@ public class Solitario {
 
     }
     
-    public static void evaluateGame(){
+    public static void evaluateGame(Jugador player) throws Exception {
         
-        if (true /* los montones exteriores contienen todas las cartas */){
+        status = Status.LOOSE;
+        
+        if (player.getMesa().getOutterCardCount() == 40){
             status = Status.WIN;
-        } else if (true /* quedan cartas en la zona interior */){
-            if (true /* no hay más movimientos posibles */) {
-                status = Status.LOOSE;
-            }
-        } else status = Status.DEFAULT;
+        } else {
+            if (player.getMesa().getInnerCardCount() > 0){
+                if (true /* hay más movimientos posibles */){
+                    status = Status.DEFAULT;
+                }
+            } else status = Status.WIN;
+        }
         
     }
 
