@@ -22,7 +22,7 @@ public class Jugador {
     
     public void startMesa() {
         Baraja baraja = new Baraja();
-        for (int i = 0; i < 40; i++){
+        for (int i = 0; i < Baraja.NUMCARTAS; i++){
             // Disponer cartas en mesa según enunciado
             // empaceCard(baraja.popCarta(), mesa.getMonton**(**))
         }

@@ -15,7 +15,7 @@ public class Carta {
 
     public Carta(Palos palo, int numero) throws Exception {
         if ((palo != Palos.BASTOS  && palo != Palos.COPAS && palo != Palos.ESPADAS && palo != Palos.OROS)
-                || ((numero < 1 || numero > 12 || numero > 7 && numero < 10)))
+                || ((numero < 1 || numero > 10 )))
             throw new Exception("Carta inválida");
 
         this.palo = palo;
@@ -32,7 +32,10 @@ public class Carta {
     
     public String toString(){
         StringBuilder toret = new StringBuilder();
-        toret.append("[").append(getNumero()).append(" | ").append(getPalo()).append("]");
+        toret.append("[");
+        if (getNumero() > 7) toret.append(getNumero()+2);
+        else toret.append(getNumero());
+        toret.append(" | ").append(getPalo()).append("]");
         return toret.toString();
     }
 

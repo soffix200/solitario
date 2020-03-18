@@ -32,19 +32,22 @@ import java.util.Stack;
  */
 public class Mesa {
     
+    public static final int NUMFILAS = 4;
+    public static final int NUMCOLUMNAS = 4;
+    
     private Stack<Carta>[][] montonesInteriores;
     private Stack<Carta>[] montonesExteriores;
     
     public Mesa(){
         
-        montonesInteriores = new Stack[4][4];
+        montonesInteriores = new Stack[NUMFILAS][NUMCOLUMNAS];
         montonesExteriores = new Stack[Palos.values().length];
         
         // NO SE DETALLA Distribución de cartas en mes [montonerExteriores]; DEMASIADO COMPLEJO
         
     }
     
-    public Stack getMontonInterior(int i, int j) throws Exception {
+    public Stack<Carta> getMontonInterior(int i, int j) throws Exception {
         if (i >= montonesInteriores.length || i < 0 || j >= montonesInteriores[0].length || j < 0) {
             throw new Exception("Posicion invalida");
         }
@@ -61,7 +64,7 @@ public class Mesa {
         return toret;
     }
 
-    public Stack getMontonExterior(int i) throws Exception {
+    public Stack<Carta> getMontonExterior(int i) throws Exception {
         if (i >= montonesExteriores.length || i < 0) {
             throw new Exception("Posicion invalida");
         }

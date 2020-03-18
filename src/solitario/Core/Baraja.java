@@ -15,19 +15,14 @@ import java.util.Stack;
  */
 public class Baraja {
     
+    public static final int NUMCARTAS = 40;
+    
     private Stack<Carta> cartas;
     
     public Baraja(){
         cartas = new Stack<>();
         for(Palos palo : Palos.values()){
-            for (int i = 0; i < 8; i++){
-                try {
-                    cartas.add(new Carta(palo, i));
-                } catch (Exception exc) {
-                    System.err.println("ERROR: " + exc.getMessage());
-                }
-            }
-            for (int i = 10; i < 13; i++){
+            for (int i = 1; i <= (NUMCARTAS/Palos.values().length); i++){
                 try {
                     cartas.add(new Carta(palo, i));
                 } catch (Exception exc) {
