@@ -20,11 +20,23 @@ public class ES{
     }
 
     public static int pideNumero(String mensaje) {
+        
 
-        System.out.print(mensaje);
+        int a = 0;
+        boolean esNumero = false;
 
         // Pedir
-        return Integer.parseInt(leer.nextLine());
+        do {
+            try {
+                a = Integer.parseInt(pideCadena(mensaje));
+                esNumero = true;
+            } catch (NumberFormatException exc) {
+                System.err.println("Se esperaba un numero");
+            }
+        } while (!esNumero);
 
+        return a;
+        
     }
+    
 }

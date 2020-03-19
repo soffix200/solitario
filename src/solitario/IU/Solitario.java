@@ -19,9 +19,7 @@ public class Solitario {
     private static Status status = Status.DEFAULT;
 
     public static void inicioPartida() {
-
         Jugador player = new Jugador();
-
         do {
             System.out.println(player.getMesa());
             try {
@@ -31,52 +29,72 @@ public class Solitario {
                 System.err.println("ERROR: " + exc.getMessage());
             }
         } while (status == Status.DEFAULT);
-        
+        System.out.println(player.getMesa());
         if (status == Status.WIN){
             System.out.println("ENHORABUENA, HAS GANADO!!");
         } else System.out.println("HAS PERDIDO EL JUEGO!!");
-
     }
     
     private static void evaluateGame(Jugador player) throws Exception {
-        
         status = Status.LOOSE;
-        
         if (player.getMesa().getOutterCardCount() == 40){
             status = Status.WIN;
         } else {
             if (player.getMesa().getInnerCardCount() > 0){
-                if (true /* hay más movimientos posibles */ ){
+                if (areActionsPossible(player)){
                     status = Status.DEFAULT;
                 }
-            } else status = Status.WIN;
+            }
         }
-        
     }
     
     private static boolean areActionsPossible(Jugador player){
-    
-        boolean toret = false;
-
-        for (int i = 0; i < player.getMesa().NUMFILAS; i++) {
-            for (int j = 0; j < player.getMesa().NUMCOLUMNAS; j++) {
-                // Por cada monton interior
-                
-                for (int h = 0; h < Palos.values().length; h++){
-                    if (player.getMesa().getMontonExterior(h).peek().getNumero()+1 == player.getMesa().getMontonInterior(i, j).peek().getNumero())
-                }
-                
-                for (int k = 0; k < player.getMesa().NUMFILAS; k++) {
-                    for (int l = 0; l < player.getMesa().NUMCOLUMNAS; l++) {
-                        // Comprueba si se puede poner en otro montón
+        boolean possible = false;
+        int i = 0;
+        while (!possible && i != player.getMesa().NUMFILAS){
+            int j = 0;
+            while (!possible && j != player.getMesa().NUMCOLUMNAS) {
+                int h = 0;
+                while (!possible && h != Palos.values().length) {
+                    try {
+                        if (!player.getMesa().getMontonInterior(i, j).isEmpty()){
+                            if (player.getMesa().getMontonExterior(h).isEmpty()){
+                                if (player.getMesa().getMontonInterior(i, j).peek().getNumero() == 1){
+                                    possible = true;
+                                }
+                            } else if (player.getMesa().getMontonExterior(h).peek().getNumero() + 1 == player.getMesa().getMontonInterior(i, j).peek().getNumero()) {
+                                possible = true;
+                            }
+                        }
+                    } catch (Exception exc){
+                        System.err.println("ERROR: " + exc.getMessage());
                     }
+                    h++;
                 }
-
+                int k = 0;
+                while (!possible && k != player.getMesa().NUMFILAS) {
+                    int l = 0;
+                    while (!possible && l != player.getMesa().NUMCOLUMNAS) {
+                        try {
+                            if (!player.getMesa().getMontonInterior(i, j).isEmpty()){
+                                if (!player.getMesa().getMontonInterior(k, l).isEmpty()) {
+                                    if (player.getMesa().getMontonInterior(k, l).peek().getNumero() - 1 == player.getMesa().getMontonInterior(i, j).peek().getNumero()) {
+                                        possible = true;
+                                    }
+                                }
+                            }
+                        } catch (Exception exc) {
+                            System.err.println("ERROR: " + exc.getMessage());
+                        }
+                        l++;
+                    }
+                    k++;
+                }
+                j++;
             }
+            i++;
         }
-        
-        return toret;
-        
+        return possible;
     } 
 
 }

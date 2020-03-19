@@ -39,12 +39,16 @@ public class Mesa {
     private Stack<Carta>[] montonesExteriores;
     
     public Mesa(){
-        
         montonesInteriores = new Stack[NUMFILAS][NUMCOLUMNAS];
+        for (int i = 0; i < montonesInteriores.length; i++){
+            for (int j = 0; j < montonesInteriores[0].length; j++){
+                montonesInteriores[i][j] = new Stack<>();
+            }
+        }
         montonesExteriores = new Stack[Palos.values().length];
-        
-        // NO SE DETALLA Distribución de cartas en mes [montonerExteriores]; DEMASIADO COMPLEJO
-        
+        for (int i = 0; i < montonesExteriores.length; i++){
+            montonesExteriores[i] = new Stack<>();
+        }
     }
     
     public Stack<Carta> getMontonInterior(int i, int j) throws Exception {
@@ -80,22 +84,60 @@ public class Mesa {
     }
     
     public String toString() { // Hacer cosa más visual que esta vaina
-        StringBuilder toret = new StringBuilder();
+        StringBuilder toret = new StringBuilder("\n\n\n\n\n\n\n\n\n");
+        int contador = 1;
 
-        toret.append("Monton Exterior:\n");
-
-        for (int i = 0; i < montonesExteriores.length; i++) {
-            toret.append(montonesExteriores[i].toString()).append("    ");
-        }
-
-        toret.append("\nMonton Interior:\n");
-
-        for (int i = 0; i < montonesInteriores.length; i++) {
-            for (int j = 0; j < montonesInteriores[i].length; j++) {
-                toret.append(montonesInteriores[i][j]).append("\t");
+        toret.append("\n********************************************** MONTONES INTERIORES **********************************************\n");
+        //Del 1 al 12
+        for (int u = 0; u < montonesInteriores.length - 1; u++) {
+            for (int j = 0; j < montonesInteriores[u].length; j++) {
+                toret.append("Monton: ").append(contador).append("\t\t\t");
+                contador++;
             }
             toret.append("\n");
+            for (int i = 0; i < montonesInteriores[u].length; i++) {
+                //If monton vacio{append("Monton Vacio\t\t\t") }else{ toret.append("Palo | ").append("Numero\t\t\t");}
+                if (montonesInteriores[u][i].isEmpty()) {
+                    toret.append("Monton Vacio\t\t\t");
+                } else {
+                    toret.append(montonesInteriores[u][i].peek()).append("\t\t\t");
+                }
+            }
+            toret.append("\n-----------------------------------------------------------------------------------------------------------------\n");
         }
+
+        //Del 13 al 16
+        for (int j = 0; j < montonesInteriores.length; j++) {
+            toret.append("Monton: ").append(contador).append("\t\t\t");
+            contador++;
+        }
+        toret.append("\n");
+
+        for (int j = 0; j < montonesInteriores.length; j++) {
+            if (montonesInteriores[montonesInteriores.length - 1][j].isEmpty()) {
+                toret.append("Monton Vacio\t\t\t");
+            } else {
+                toret.append(montonesInteriores[montonesInteriores.length - 1][j].peek()).append("\t\t\t");
+            }
+
+        }
+
+        //Del 17 al 20
+        toret.append("\n\n********************************************** MONTONES EXTERIORES **********************************************\n\n");
+        for (int j = 0; j < montonesExteriores.length; j++) {
+            toret.append("Monton: ").append(contador).append("\t\t\t");
+            contador++;
+        }
+        toret.append("\n");
+        for (int i = 0; i < montonesExteriores.length; i++) {
+            if (montonesExteriores[i].isEmpty()) {
+                toret.append("Monton Vacio\t\t\t");
+            } else {
+                toret.append(montonesExteriores[i].peek()).append("\t\t\t");
+            }
+
+        }
+
         return toret.toString();
     }
     

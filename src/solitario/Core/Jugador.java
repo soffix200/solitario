@@ -7,6 +7,7 @@
 package solitario.Core;
 
 import java.util.Stack;
+import solitario.IU.ES;
 
 /**
  * @author AEDI
@@ -18,13 +19,36 @@ public class Jugador {
 
     public Jugador() {
         mesa = new Mesa();
+        startMesa();
     }
     
     public void startMesa() {
         Baraja baraja = new Baraja();
-        for (int i = 0; i < Baraja.NUMCARTAS; i++){
-            // Disponer cartas en mesa según enunciado
-            // empaceCard(baraja.popCarta(), mesa.getMonton**(**))
+        for (int i = 0; i < mesa.NUMFILAS; i++){
+            for (int j = 0; j < mesa.NUMCOLUMNAS; j++){
+                try{
+                    emplaceCard(baraja.popCarta(), mesa.getMontonInterior(i, j));
+                } catch(Exception exc){
+                    System.err.println("ERROR: " + exc.getMessage());
+                }
+            }
+        }
+        for (int i = 0; i < mesa.NUMFILAS; i++) {
+            try {
+                emplaceCard(baraja.popCarta(), mesa.getMontonInterior(i, i));
+                emplaceCard(baraja.popCarta(), mesa.getMontonInterior(i, 3-i));
+            } catch (Exception exc) {
+                System.err.println("ERROR: " + exc.getMessage());
+            }
+        }
+        for (int i = 0; i < mesa.NUMFILAS; i++){
+            for (int j = 0; j < mesa.NUMCOLUMNAS; j++){
+                try{
+                    emplaceCard(baraja.popCarta(), mesa.getMontonInterior(i, j));
+                } catch(Exception exc){
+                    System.err.println("ERROR: " + exc.getMessage());
+                }
+            }
         }
     }
 
@@ -36,50 +60,57 @@ public class Jugador {
         destination.push(carta);
     }
     
-    public void moveCard(Stack<Carta> origin, Stack<Carta> destination){ // @victor
-        // Decide si invocar a moveCardIn() o moveCardOut()
-    }
-    
-    public void moveCardIn(Stack<Carta> origin, Stack<Carta> destination){ // @victor
-        /*
-        try{
-            // if carta can be placed in destination
-            if (destination.peek().getNumero()+1 == origin.peek())
-            destination.push(origin.peek());
-        } catch (Exception exc){
-            System.err.println("La carta no se pudo mover: " + exc.getMessage());
+    public void moveCard(Stack<Carta> origin, Pair<Stack<Carta>,Boolean> destination) {
+        if (!origin.isEmpty()){ // Si hay al menos una carta para mover en origin
+            if (destination.second) { // Si destination es exterior
+                if (origin.peek().getNumero() == 1 && destination.first.isEmpty()) {
+                    emplaceCard(origin.pop(), destination.first);
+                } else {
+                    if ((destination.first.peek().getNumero() == origin.peek().getNumero()-1) && (destination.first.peek().getPalo() == origin.peek().getPalo())){
+                        emplaceCard(origin.pop(), destination.first);
+                    } else {
+                        System.err.println("La carta no se puede mover al montón indicado");
+                    }
+                }
+            } else { // Si destination es interior
+                if (destination.first.isEmpty()) {
+                    System.err.println("No se pueden mover cartas a montones vacíos en el interior del tablero");
+                } else {
+                    if ((destination.first.peek().getNumero() == origin.peek().getNumero()+1) && (destination.first.peek().getPalo() == origin.peek().getPalo())){
+                        emplaceCard(origin.pop(), destination.first);
+                    } else {
+                        System.err.println("La carta no se puede mover al montón indicado");
+                    }
+                }
+            }
+        } else {
+            System.err.println("No hay carta para mover");
         }
-        origin.pop();
-        */
-    }
-    
-    public void moveCardOut(Stack<Carta> origin, Stack<Carta> destination){ // @victor
-        /*
-        try{
-            // if carta can be placed in destination
-            if (destination.peek().getNumero()+1 == origin.peek())
-            destination.push(origin.peek());
-        } catch (Exception exc){
-            System.err.println("La carta no se pudo mover: " + exc.getMessage());
-        }
-        origin.pop();
-        */
     }
     
     public Stack selectOrigin() throws Exception {
-        
-        // Con el menú y todo el rollo
-        // La Exception se lanza en Mesa.getMonton(); nohay que preocuparse aquí
-        
-        return new Stack<Carta>(); // TEMPORAL, PARA QUE NO SE QUEJE NETBEANS, ESTÁ SIN IMPLEMENTAR; BORRAR EN CUANTO IMPLEMENTADO
+        int i = 0;
+        while (i < 1 || i > 16) {
+            i = ES.pideNumero("\nIntroduczca el monton desde el que se moverá la carta [1 - 16]: "); //HACER EN LA CLASE MESA EL DISPLAY DE COUT, del 1 al 16 ambos incluidos.
+            if (i < 1 || i > 16) System.err.println("Se esperaba un número [1 - 16]");
+        }
+        return mesa.getMontonInterior(--i/4, i%4);
     }
     
-    public Stack selectDestination() throws Exception {
+    public Pair<Stack<Carta>, Boolean> selectDestination() throws Exception {
+        int i = 0;
+        while (i < 1 || i > 20) {
+            i = ES.pideNumero("\nIntroduczca el monton al que se movera la carta [1 - 20]: "); //HACER EN LA CLASE MESA EL DISPLAY DE COUT--> Exterior del 17 al 20. Interior del 1 al 16.
+            if (i < 1 || i > 20) System.err.println("Se esperaba un número [1 - 20]");
+        }
         
-        // Con el menú y todo el rollo
-        // La Exception se lanza en Mesa.getMonton(); nohay que preocuparse aquí
-        
-        return new Stack<Carta>(); // TEMPORAL, PARA QUE NO SE QUEJE NETBEANS, ESTÁ SIN IMPLEMENTAR; BORRAR EN CUANTO IMPLEMENTADO
+        Pair<Stack<Carta>, Boolean> destino;
+        if (--i/4 == 4) {
+            destino = Pair.of(mesa.getMontonExterior(i%4), true); // TRUE si es exterior
+        } else {
+            destino = Pair.of(mesa.getMontonInterior(i/4, i%4), false); // FALSE si es interior
+        }
+        return destino;
     }
     
 }
