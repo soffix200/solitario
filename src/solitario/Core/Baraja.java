@@ -30,7 +30,7 @@ public class Baraja {
                 }
             }
         }
-        //Collections.shuffle(cartas); // Pensar en método más ortodoxo
+        Collections.shuffle(cartas); // Pensar en método más ortodoxo
     }
     
     public boolean esVacia(){
