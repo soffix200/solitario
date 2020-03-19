@@ -63,7 +63,9 @@ public class Solitario {
                                     possible = true;
                                 }
                             } else if (player.getMesa().getMontonExterior(h).peek().getNumero() + 1 == player.getMesa().getMontonInterior(i, j).peek().getNumero()) {
-                                possible = true;
+                                if (player.getMesa().getMontonExterior(h).peek().getPalo() == player.getMesa().getMontonInterior(i, j).peek().getPalo()){
+                                    possible = true;
+                                }
                             }
                         }
                     } catch (Exception exc){
@@ -79,7 +81,9 @@ public class Solitario {
                             if (!player.getMesa().getMontonInterior(i, j).isEmpty()){
                                 if (!player.getMesa().getMontonInterior(k, l).isEmpty()) {
                                     if (player.getMesa().getMontonInterior(k, l).peek().getNumero() - 1 == player.getMesa().getMontonInterior(i, j).peek().getNumero()) {
-                                        possible = true;
+                                        if (player.getMesa().getMontonInterior(k, l).peek().getPalo() == player.getMesa().getMontonInterior(i, j).peek().getPalo()){
+                                            possible = true;
+                                        }
                                     }
                                 }
                             }
