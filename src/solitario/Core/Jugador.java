@@ -63,8 +63,12 @@ public class Jugador {
     public void moveCard(Stack<Carta> origin, Pair<Stack<Carta>,Boolean> destination) {
         if (!origin.isEmpty()){ // Si hay al menos una carta para mover en origin
             if (destination.second) { // Si destination es exterior
-                if (origin.peek().getNumero() == 1 && destination.first.isEmpty()) {
-                    emplaceCard(origin.pop(), destination.first);
+                if (destination.first.isEmpty()){
+                    if (origin.peek().getNumero() == 1){
+                        emplaceCard(origin.pop(), destination.first);
+                    } else {
+                        System.err.println("No se puede mover una carta distinta de 1 a un montón exterior vacío");
+                    }
                 } else {
                     if ((destination.first.peek().getNumero() == origin.peek().getNumero()-1) && (destination.first.peek().getPalo() == origin.peek().getPalo())){
                         emplaceCard(origin.pop(), destination.first);

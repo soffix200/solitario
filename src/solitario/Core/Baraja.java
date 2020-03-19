@@ -21,8 +21,8 @@ public class Baraja {
     
     public Baraja(){
         cartas = new Stack<>();
-        for(Palos palo : Palos.values()){
-            for (int i = 1; i <= (NUMCARTAS/Palos.values().length); i++){
+        for (int i = 1; i <= (NUMCARTAS/Palos.values().length); i++){
+            for(Palos palo : Palos.values()){
                 try {
                     cartas.add(new Carta(palo, i));
                 } catch (Exception exc) {
@@ -30,7 +30,7 @@ public class Baraja {
                 }
             }
         }
-        Collections.shuffle(cartas); // Pensar en método más ortodoxo
+        //Collections.shuffle(cartas); // Pensar en método más ortodoxo
     }
     
     public boolean esVacia(){
