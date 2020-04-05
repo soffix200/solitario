@@ -5,10 +5,6 @@
  */
 package solitario.Core;
 
-/**
- *
- * @author agope
- */
 public class Pair<U, V> {
     
     public final U first;
