@@ -60,20 +60,20 @@ public class Jugador {
         destination.push(carta);
     }
     
-    public void moveCard(Stack<Carta> origin, Pair<Stack<Carta>,Boolean> destination) {
+    public void moveCard(Stack<Carta> origin, Pair<Stack<Carta>,Boolean> destination) throws Exception {
         if (!origin.isEmpty()){ // Si hay al menos una carta para mover en origin
             if (destination.second) { // Si destination es exterior
                 if (destination.first.isEmpty()){
                     if (origin.peek().getNumero() == 1){
                         emplaceCard(origin.pop(), destination.first);
                     } else {
-                        System.err.println("No se puede mover una carta distinta de 1 a un montón exterior vacío");
+                        throw new Exception("No se puede mover una carta distinta de 1 a un montón exterior vacío");
                     }
                 } else {
                     if ((destination.first.peek().getNumero() == origin.peek().getNumero()-1) && (destination.first.peek().getPalo() == origin.peek().getPalo())){
                         emplaceCard(origin.pop(), destination.first);
                     } else {
-                        System.err.println("La carta no se puede mover al montón indicado");
+                        throw new Exception("La carta no se puede mover al montón indicado");
                     }
                 }
             } else { // Si destination es interior
@@ -83,12 +83,12 @@ public class Jugador {
                     if ((destination.first.peek().getNumero() == origin.peek().getNumero()+1) && (destination.first.peek().getPalo() == origin.peek().getPalo())){
                         emplaceCard(origin.pop(), destination.first);
                     } else {
-                        System.err.println("La carta no se puede mover al montón indicado");
+                        throw new Exception("La carta no se puede mover al montón indicado");
                     }
                 }
             }
         } else {
-            System.err.println("No hay carta para mover");
+            throw new Exception("No hay carta para mover");
         }
     }
     
@@ -105,7 +105,7 @@ public class Jugador {
         int i = 0;
         while (i < 1 || i > 20) {
             i = ES.pideNumero("\nIntroduczca el monton al que se movera la carta [1 - 20]: "); //HACER EN LA CLASE MESA EL DISPLAY DE COUT--> Exterior del 17 al 20. Interior del 1 al 16.
-            if (i < 1 || i > 20) System.err.println("Se esperaba un número [1 - 20]");
+            if (i < 1 || i > 20) throw new Exception("Se esperaba un número [1 - 20]");
         }
         
         Pair<Stack<Carta>, Boolean> destino;

@@ -20,7 +20,6 @@ public class ES{
     }
 
     public static int pideNumero(String mensaje) {
-        
 
         int a = 0;
         boolean esNumero = false;

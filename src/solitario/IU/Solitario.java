@@ -15,36 +15,34 @@ import solitario.Core.Palos;
  */
 public class Solitario {
     
-    private static enum Status {DEFAULT, WIN, LOOSE};
+    private static enum Status {DEFAULT, WIN, LOSE};
     private static Status status = Status.DEFAULT;
 
     public static void inicioPartida() {
         Jugador player = new Jugador();
+        System.out.println(player.getMesa());
         do {
-            System.out.println(player.getMesa());
+            String res = "";
             try {
                 player.moveCard(player.selectOrigin(), player.selectDestination());
                 evaluateGame(player);
             } catch (Exception exc){
-                System.err.println("ERROR: " + exc.getMessage());
+                res = "ERROR: " + exc.getMessage();
+            } finally {
+                System.out.println(player.getMesa());
+                System.out.println(res); // Devuelve el error por flujo estándar, si ocurriese, para evitar salidas aleatorias por flujo de error
             }
         } while (status == Status.DEFAULT);
-        System.out.println(player.getMesa());
         if (status == Status.WIN){
             System.out.println("ENHORABUENA, HAS GANADO!!");
-        } else System.out.println("HAS PERDIDO EL JUEGO!!");
+        } else System.out.println("HAS PERDIDO, VUELVE A INTENTRLO!!");
     }
     
     private static void evaluateGame(Jugador player) throws Exception {
-        status = Status.LOOSE;
         if (player.getMesa().getOutterCardCount() == 40){
             status = Status.WIN;
-        } else {
-            if (player.getMesa().getInnerCardCount() > 0){
-                if (areActionsPossible(player)){
-                    status = Status.DEFAULT;
-                }
-            }
+        } else if (!areActionsPossible(player)) {
+            status = Status.LOSE;
         }
     }
     
