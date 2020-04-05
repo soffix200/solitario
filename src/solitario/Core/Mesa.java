@@ -120,7 +120,6 @@ public class Mesa {
     public String toString(){
         StringBuilder toret = new StringBuilder();
         
-        //toret.append("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         // MONTONES INTERIORES
         toret.append("\n══════════════════════════════════════ MONTONES INTERIORES ══════════════════════════════════════\n");
         for (int i = 0; i < montonesInteriores.length; i++){

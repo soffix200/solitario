@@ -95,7 +95,7 @@ public class Jugador {
     public Stack selectOrigin() throws Exception {
         int i = 0;
         while (i < 1 || i > 16) {
-            i = ES.pideNumero("\nIntroduczca el monton desde el que se moverá la carta [1 - 16]: "); //HACER EN LA CLASE MESA EL DISPLAY DE COUT, del 1 al 16 ambos incluidos.
+            i = ES.pideNumero("\nIntroduczca el monton desde el que se moverá la carta [1 - 16]: ");
             if (i < 1 || i > 16) System.err.println("Se esperaba un número [1 - 16]");
         }
         return mesa.getMontonInterior(--i/4, i%4);
@@ -104,7 +104,7 @@ public class Jugador {
     public Pair<Stack<Carta>, Boolean> selectDestination() throws Exception {
         int i = 0;
         while (i < 1 || i > 20) {
-            i = ES.pideNumero("\nIntroduczca el monton al que se movera la carta [1 - 20]: "); //HACER EN LA CLASE MESA EL DISPLAY DE COUT--> Exterior del 17 al 20. Interior del 1 al 16.
+            i = ES.pideNumero("\nIntroduczca el monton al que se movera la carta [1 - 20]: ");
             if (i < 1 || i > 20) throw new Exception("Se esperaba un número [1 - 20]");
         }
         
