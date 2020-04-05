@@ -24,6 +24,7 @@ public class Jugador {
     
     public void startMesa() {
         Baraja baraja = new Baraja();
+        // Se colocan las 16 primeras cartas (4x4)
         for (int i = 0; i < mesa.NUMFILAS; i++){
             for (int j = 0; j < mesa.NUMCOLUMNAS; j++){
                 try{
@@ -33,6 +34,7 @@ public class Jugador {
                 }
             }
         }
+        // Se colocan las 8 cartas de las diagonales
         for (int i = 0; i < mesa.NUMFILAS; i++) {
             try {
                 emplaceCard(baraja.popCarta(), mesa.getMontonInterior(i, i));
@@ -41,6 +43,7 @@ public class Jugador {
                 System.err.println("ERROR: " + exc.getMessage());
             }
         }
+        // Se colocan las 16 últimas cartas (4x4)
         for (int i = 0; i < mesa.NUMFILAS; i++){
             for (int j = 0; j < mesa.NUMCOLUMNAS; j++){
                 try{
