@@ -86,29 +86,29 @@ public class Mesa {
     public String rowToString(int i){
         StringBuilder toret = new StringBuilder();
         // LINE 1
-        toret.append("\n█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█");
+        toret.append("\n==================================================================================================");
         // LINE 2
-        toret.append("\n█");
+        toret.append("\n||");
         for (int j = 0; j < montonesInteriores[0].length; j++){
-            toret.append("  Montón ").append((i*montonesInteriores[0].length)+j+1).append("\t\t█");
+            toret.append("  Montón ").append((i*montonesInteriores[0].length)+j+1).append("\t\t||");
         }
         // LINE 3
-        toret.append("\n█                       █                       █                       █                       █");
+        toret.append("\n||                      ||                      ||                      ||                      ||");
         // LINE 4
-        toret.append("\n█");
+        toret.append("\n||");
         for (int j = 0; j < montonesInteriores[0].length; j++){
             toret.append("\t");
             if (i != 4) {
                 if (montonesInteriores[i][j].isEmpty()) {
-                    toret.append("  [VACIO]").append("\t█");
+                    toret.append("  [VACIO]").append("\t||");
                 } else {
-                    toret.append(montonesInteriores[i][j].peek()).append("\t█");
+                    toret.append(montonesInteriores[i][j].peek()).append("\t||");
                 }
             } else {
                 if (montonesExteriores[j].isEmpty()) {
-                    toret.append("  [VACIO]").append("\t█");
+                    toret.append("  [VACIO]").append("\t||");
                 } else {
-                    toret.append(montonesExteriores[j].peek()).append("\t█");
+                    toret.append(montonesExteriores[j].peek()).append("\t||");
                 }
             }
         }
@@ -121,16 +121,16 @@ public class Mesa {
         StringBuilder toret = new StringBuilder();
         
         // MONTONES INTERIORES
-        toret.append("\n══════════════════════════════════════ MONTONES INTERIORES ══════════════════════════════════════\n");
+        toret.append("\n|||||||||||||||||||||||||||||||||||||| MONTONES INTERIORES |||||||||||||||||||||||||||||||||||||||\n");
         for (int i = 0; i < montonesInteriores.length; i++){
             toret.append(rowToString(i));
         }
-        toret.append("\n▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n");
+        toret.append("\n==================================================================================================\n");
         
         // MONTONES EXTERIORES
-        toret.append("\n══════════════════════════════════════ MONTONES EXTERIORES ══════════════════════════════════════\n");
+        toret.append("\n|||||||||||||||||||||||||||||||||||||| MONTONES EXTERIORES |||||||||||||||||||||||||||||||||||||||\n");
         toret.append(rowToString(4));
-        toret.append("\n▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n");
+        toret.append("\n==================================================================================================\n");
         
         return toret.toString();
     }
