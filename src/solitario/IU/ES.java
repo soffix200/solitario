@@ -30,7 +30,7 @@ public class ES{
                 a = Integer.parseInt(pideCadena(mensaje));
                 esNumero = true;
             } catch (NumberFormatException exc) {
-                System.err.println("Se esperaba un numero");
+                System.err.println("Se esperaba un numero" + "\n");
             }
         } while (!esNumero);
 

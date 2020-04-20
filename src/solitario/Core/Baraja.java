@@ -23,14 +23,10 @@ public class Baraja {
         cartas = new Stack<>();
         for (int i = 1; i <= (NUMCARTAS/Palos.values().length); i++){
             for(Palos palo : Palos.values()){
-                try {
-                    cartas.add(new Carta(palo, i));
-                } catch (Exception exc) {
-                    System.err.println("ERROR: " + exc.getMessage());
-                }
+                cartas.add(new Carta(palo, i));
             }
         }
-        Collections.shuffle(cartas); // Pensar en método más ortodoxo
+        Collections.shuffle(cartas);
     }
     
     public boolean esVacia(){

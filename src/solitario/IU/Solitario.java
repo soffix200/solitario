@@ -5,8 +5,11 @@
 
 package solitario.IU;
 
+import solitario.Core.Carta;
 import solitario.Core.Jugador;
+import solitario.Core.Mesa;
 import solitario.Core.Palos;
+import solitario.Core.Position;
 
 /**
  * @author AEDI
@@ -15,88 +18,50 @@ import solitario.Core.Palos;
  */
 public class Solitario {
     
-    private static enum Status {DEFAULT, WIN, LOSE};
-    private static Status status = Status.DEFAULT;
+    private static Position selectInnerPosition() {
+        int i = 0;
+        while (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS) {
+            i = ES.pideNumero("\nIntroduczca el monton [1 - " + Mesa.NUMFILAS*Mesa.NUMCOLUMNAS + "]: ");
+            if (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS) System.err.println("Se esperaba un número [1 - " + Mesa.NUMFILAS*Mesa.NUMCOLUMNAS + "]" + "\n");
+        }
+        return new Position(--i/Mesa.NUMFILAS, i%Mesa.NUMFILAS);
+    }
+    private static Position selectAnyPosition() {
+        int i = 0;
+        while (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) {
+            i = ES.pideNumero("\nIntroduczca el monton [1 - " + (Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) + "]: ");
+            if (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) System.err.println("Se esperaba un número [1 - " + (Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) + "]" + "\n");
+        }
+        return new Position(--i/Mesa.NUMFILAS, i%Mesa.NUMFILAS);
+    }
 
     public static void inicioPartida() {
-        Jugador player = new Jugador();
-        System.out.println(player.getMesa());
-        do {
-            String res = "";
+        Jugador jugador = new Jugador();
+        Mesa mesa = new Mesa();
+        
+        System.out.println(mesa);
+        
+        while(Mesa.status == Mesa.Status.DEFAULT){
             try {
-                player.moveCard(player.selectOrigin(), player.selectDestination());
-                evaluateGame(player);
-            } catch (Exception exc){
-                res = "ERROR: " + exc.getMessage();
-            } finally {
-                System.out.println(player.getMesa());
-                System.out.println(res); // Devuelve el error por flujo estándar, si ocurriese, para evitar salidas aleatorias por flujo de error
+                Position take = selectInnerPosition();
+                Position drop = selectAnyPosition();
+                Carta carta = jugador.takeCarta(mesa, take);
+                try {
+                    jugador.pushCarta(mesa, carta, drop);
+                    mesa.evaluateGame();
+                } catch (Exception exc) {
+                    System.err.println("\nERROR. " + exc.getMessage() + "\n");
+                    jugador.emplaceCarta(mesa, carta, take);
+                }
+            } catch (Exception exc) {
+                System.err.println("\nERROR. " + exc.getMessage() + "\n");
             }
-        } while (status == Status.DEFAULT);
-        if (status == Status.WIN){
+            System.out.println(mesa);
+        }
+                
+        if (Mesa.status == Mesa.Status.WIN){
             System.out.println("ENHORABUENA, HAS GANADO!!");
         } else System.out.println("HAS PERDIDO, VUELVE A INTENTRLO!!");
     }
-    
-    private static void evaluateGame(Jugador player) throws Exception {
-        if (player.getMesa().getOutterCardCount() == 40){
-            status = Status.WIN;
-        } else if (!areActionsPossible(player)) {
-            status = Status.LOSE;
-        }
-    }
-    
-    private static boolean areActionsPossible(Jugador player){
-        boolean possible = false;
-        int i = 0;
-        while (!possible && i != player.getMesa().NUMFILAS){
-            int j = 0;
-            while (!possible && j != player.getMesa().NUMCOLUMNAS) {
-                int h = 0;
-                while (!possible && h != Palos.values().length) {
-                    try {
-                        if (!player.getMesa().getMontonInterior(i, j).isEmpty()){
-                            if (player.getMesa().getMontonExterior(h).isEmpty()){
-                                if (player.getMesa().getMontonInterior(i, j).peek().getNumero() == 1){
-                                    possible = true;
-                                }
-                            } else if (player.getMesa().getMontonExterior(h).peek().getNumero() + 1 == player.getMesa().getMontonInterior(i, j).peek().getNumero()) {
-                                if (player.getMesa().getMontonExterior(h).peek().getPalo() == player.getMesa().getMontonInterior(i, j).peek().getPalo()){
-                                    possible = true;
-                                }
-                            }
-                        }
-                    } catch (Exception exc){
-                        System.err.println("ERROR: " + exc.getMessage());
-                    }
-                    h++;
-                }
-                int k = 0;
-                while (!possible && k != player.getMesa().NUMFILAS) {
-                    int l = 0;
-                    while (!possible && l != player.getMesa().NUMCOLUMNAS) {
-                        try {
-                            if (!player.getMesa().getMontonInterior(i, j).isEmpty()){
-                                if (!player.getMesa().getMontonInterior(k, l).isEmpty()) {
-                                    if (player.getMesa().getMontonInterior(k, l).peek().getNumero() - 1 == player.getMesa().getMontonInterior(i, j).peek().getNumero()) {
-                                        if (player.getMesa().getMontonInterior(k, l).peek().getPalo() == player.getMesa().getMontonInterior(i, j).peek().getPalo()){
-                                            possible = true;
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Exception exc) {
-                            System.err.println("ERROR: " + exc.getMessage());
-                        }
-                        l++;
-                    }
-                    k++;
-                }
-                j++;
-            }
-            i++;
-        }
-        return possible;
-    } 
 
 }

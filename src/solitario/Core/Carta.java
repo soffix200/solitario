@@ -13,11 +13,7 @@ public class Carta {
     private Palos palo;
     private int numero;    
 
-    public Carta(Palos palo, int numero) throws Exception {
-        if ((palo != Palos.BASTOS  && palo != Palos.COPAS && palo != Palos.ESPADAS && palo != Palos.OROS)
-                || ((numero < 1 || numero > 10 )))
-            throw new Exception("Carta inválida");
-
+    public Carta(Palos palo, int numero) {
         this.palo = palo;
         this.numero = numero;
     }

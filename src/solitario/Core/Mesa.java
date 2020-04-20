@@ -32,6 +32,9 @@ import java.util.Stack;
  */
 public class Mesa {
     
+    public static enum Status {DEFAULT, WIN, LOSE};
+    public static Status status = Status.DEFAULT;
+    
     public static final int NUMFILAS = 4;
     public static final int NUMCOLUMNAS = 4;
     
@@ -49,14 +52,73 @@ public class Mesa {
         for (int i = 0; i < montonesExteriores.length; i++){
             montonesExteriores[i] = new Stack<>();
         }
+        startMesa();
     }
     
-    public Stack<Carta> getMontonInterior(int i, int j) throws Exception {
-        if (i >= montonesInteriores.length || i < 0 || j >= montonesInteriores[0].length || j < 0) {
-            throw new Exception("Posicion invalida");
+    private void startMesa() {
+        Baraja baraja = new Baraja();
+        try {
+            // Se colocan las 16 primeras cartas (4x4)
+            for (int i = 0; i < NUMFILAS; i++) {
+                for (int j = 0; j < NUMCOLUMNAS; j++) {
+                    emplaceCarta(baraja.popCarta(), new Position(i,j));
+                }
+            }
+            // Se colocan las 8 cartas de las diagonales
+            for (int i = 0; i < NUMFILAS; i++) {
+                emplaceCarta(baraja.popCarta(), new Position(i,i));
+                emplaceCarta(baraja.popCarta(), new Position(i, NUMFILAS-i-1));
+            }
+            // Se colocan las 16 últimas cartas (4x4)
+            for (int i = 0; i < NUMFILAS; i++) {
+                for (int j = 0; j < NUMCOLUMNAS; j++) {
+                    emplaceCarta(baraja.popCarta(), new Position(i,j));
+                }
+            }
+        } catch (Exception exc){
+            System.err.println("ERROR: " + exc.getMessage());
         }
-        return montonesInteriores[i][j];
     }
+    
+    public Carta popCarta(Position pos) throws Exception {
+        if (montonesInteriores[pos.getI()][pos.getJ()].isEmpty()){
+            throw new Exception("Montón vacío");
+        }
+        return montonesInteriores[pos.getI()][pos.getJ()].pop();
+    }
+    
+    public void pushCarta(Carta carta, Position pos) throws Exception {
+        if (pos.getI() >= NUMFILAS) { // Si destination es exterior
+            if (montonesExteriores[pos.getJ()].isEmpty()) {
+                if (carta.getNumero() == 1) {
+                    montonesExteriores[pos.getJ()].push(carta);
+                } else {
+                    throw new Exception("No se puede mover una carta distinta de 1 a un montón exterior vacío");
+                }
+            } else {
+                if ((montonesExteriores[pos.getJ()].peek().getNumero() == carta.getNumero() - 1) && (montonesExteriores[pos.getJ()].peek().getPalo() == carta.getPalo())) {
+                    montonesExteriores[pos.getJ()].push(carta);
+                } else {
+                    throw new Exception("La carta no se puede mover al montón indicado");
+                }
+            }
+        } else { // Si destination es interior
+            if (montonesInteriores[pos.getI()][pos.getJ()].isEmpty()) {
+                System.err.println("No se pueden mover cartas a montones vacíos en el interior del tablero");
+            } else {
+                if ((montonesInteriores[pos.getI()][pos.getJ()].peek().getNumero() == carta.getNumero() + 1) && (montonesInteriores[pos.getI()][pos.getJ()].peek().getPalo() == carta.getPalo())) {
+                    montonesInteriores[pos.getI()][pos.getJ()].push(carta);
+                } else {
+                    throw new Exception("La carta no se puede mover al montón indicado");
+                }
+            }
+        }
+    }
+    
+    public void emplaceCarta(Carta carta, Position pos) {
+        montonesInteriores[pos.getI()][pos.getJ()].push(carta);
+    }
+    
     
     public int getInnerCardCount(){
         int toret = 0;
@@ -67,13 +129,6 @@ public class Mesa {
         }
         return toret;
     }
-
-    public Stack<Carta> getMontonExterior(int i) throws Exception {
-        if (i >= montonesExteriores.length || i < 0) {
-            throw new Exception("Posicion invalida");
-        }
-        return montonesExteriores[i];
-    }
     
     public int getOutterCardCount() {
         int toret = 0;
@@ -82,29 +137,100 @@ public class Mesa {
         }
         return toret;
     }
+       
+    public void evaluateGame() {
+        if (getOutterCardCount() == 40){
+            status = Status.WIN;
+        } else if (!areActionsPossible()) {
+            status = Status.LOSE;
+        }
+    }
+    
+    private boolean areActionsPossible(){
+        boolean possible = false;
+        int i = 0;
+        while (!possible && i != NUMFILAS){
+            int j = 0;
+            while (!possible && j != NUMCOLUMNAS) {
+                int h = 0;
+                while (!possible && h != Palos.values().length) {
+                    try {
+                        if (!montonesInteriores[i][j].isEmpty()){
+                            if (montonesExteriores[h].isEmpty()){
+                                if (montonesInteriores[i][j].peek().getNumero() == 1){
+                                    possible = true;
+                                }
+                            } else if (montonesExteriores[h].peek().getNumero() + 1 == montonesInteriores[i][j].peek().getNumero()) {
+                                if (montonesExteriores[h].peek().getPalo() == montonesInteriores[i][j].peek().getPalo()){
+                                    possible = true;
+                                }
+                            }
+                        }
+                    } catch (Exception exc){
+                        System.err.println("ERROR: " + exc.getMessage());
+                    }
+                    h++;
+                }
+                int k = 0;
+                while (!possible && k != NUMFILAS) {
+                    int l = 0;
+                    while (!possible && l != NUMCOLUMNAS) {
+                        try {
+                            if (!montonesInteriores[i][j].isEmpty()){
+                                if (!montonesInteriores[k][l].isEmpty()) {
+                                    if (montonesInteriores[k][l].peek().getNumero() - 1 == montonesInteriores[i][j].peek().getNumero()) {
+                                        if (montonesInteriores[k][l].peek().getPalo() == montonesInteriores[i][j].peek().getPalo()){
+                                            possible = true;
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (Exception exc) {
+                            System.err.println("ERROR: " + exc.getMessage());
+                        }
+                        l++;
+                    }
+                    k++;
+                }
+                j++;
+            }
+            i++;
+        }
+        return possible;
+    } 
+    
     
     public String rowToString(int i){
         StringBuilder toret = new StringBuilder();
         // LINE 1
-        toret.append("\n==================================================================================================");
+        toret.append("\n==");
+        for (int j = 0; j < ((i != NUMFILAS) ? NUMCOLUMNAS : Palos.values().length); j++) {
+            toret.append("========================");
+        }
         // LINE 2
         toret.append("\n||");
-        for (int j = 0; j < montonesInteriores[0].length; j++){
-            toret.append("  Montón ").append((i*montonesInteriores[0].length)+j+1).append("\t\t||");
+        for (int j = 0; j < ((i!=NUMFILAS)? NUMCOLUMNAS : Palos.values().length); j++){
+            toret.append("  Montón ").append((i*NUMCOLUMNAS)+j+1).append("\t\t||");
         }
         // LINE 3
-        toret.append("\n||                      ||                      ||                      ||                      ||");
+        toret.append("\n||");
+            for (int j = 0; j < ((i!=NUMFILAS)? NUMCOLUMNAS : Palos.values().length); j++){
+                toret.append("                      ||");
+            }
         // LINE 4
         toret.append("\n||");
-        for (int j = 0; j < montonesInteriores[0].length; j++){
-            toret.append("\t");
-            if (i != 4) {
+        if (i != NUMFILAS){
+            for (int j = 0; j < NUMCOLUMNAS; j++){
+                toret.append("\t");
                 if (montonesInteriores[i][j].isEmpty()) {
                     toret.append("  [VACIO]").append("\t||");
                 } else {
                     toret.append(montonesInteriores[i][j].peek()).append("\t||");
                 }
-            } else {
+            }
+        } else {
+            for (int j = 0; j < Palos.values().length; j++){
+                toret.append("\t");
                 if (montonesExteriores[j].isEmpty()) {
                     toret.append("  [VACIO]").append("\t||");
                 } else {
@@ -125,12 +251,18 @@ public class Mesa {
         for (int i = 0; i < montonesInteriores.length; i++){
             toret.append(rowToString(i));
         }
-        toret.append("\n==================================================================================================\n");
+        toret.append("\n==");
+        for (int j = 0; j < NUMCOLUMNAS; j++) {
+            toret.append("========================");
+        }
         
         // MONTONES EXTERIORES
-        toret.append("\n|||||||||||||||||||||||||||||||||||||| MONTONES EXTERIORES |||||||||||||||||||||||||||||||||||||||\n");
-        toret.append(rowToString(4));
-        toret.append("\n==================================================================================================\n");
+        toret.append("\n\n|||||||||||||||||||||||||||||||||||||| MONTONES EXTERIORES |||||||||||||||||||||||||||||||||||||||\n");
+        toret.append(rowToString(NUMFILAS));
+        toret.append("\n==");
+        for (int j = 0; j < Palos.values().length; j++) {
+            toret.append("========================");
+        }
         
         return toret.toString();
     }
