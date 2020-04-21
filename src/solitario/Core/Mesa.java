@@ -43,13 +43,13 @@ public class Mesa {
     
     public Mesa(){
         montonesInteriores = new Stack[NUMFILAS][NUMCOLUMNAS];
-        for (int i = 0; i < montonesInteriores.length; i++){
-            for (int j = 0; j < montonesInteriores[0].length; j++){
+        for (int i = 0; i < NUMFILAS; i++){
+            for (int j = 0; j < NUMCOLUMNAS; j++){
                 montonesInteriores[i][j] = new Stack<>();
             }
         }
         montonesExteriores = new Stack[Palos.values().length];
-        for (int i = 0; i < montonesExteriores.length; i++){
+        for (int i = 0; i < Palos.values().length; i++){
             montonesExteriores[i] = new Stack<>();
         }
         startMesa();
