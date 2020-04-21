@@ -119,17 +119,6 @@ public class Mesa {
         montonesInteriores[pos.getI()][pos.getJ()].push(carta);
     }
     
-    
-    public int getInnerCardCount(){
-        int toret = 0;
-        for (Stack<Carta>[] filaMontones : montonesInteriores){
-            for (Stack<Carta> monton : filaMontones){
-                toret += monton.size();
-            }
-        }
-        return toret;
-    }
-    
     public int getOutterCardCount() {
         int toret = 0;
         for (Stack<Carta> monton : montonesExteriores) {

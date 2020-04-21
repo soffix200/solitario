@@ -18,18 +18,18 @@ import solitario.Core.Position;
  */
 public class Solitario {
     
-    private static Position selectInnerPosition() {
+    private static Position selectOrigin() {
         int i = 0;
         while (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS) {
-            i = ES.pideNumero("\nIntroduczca el monton [1 - " + Mesa.NUMFILAS*Mesa.NUMCOLUMNAS + "]: ");
+            i = ES.pideNumero("\nIntroduczca el monton desde el que se moverá la carta [1 - " + Mesa.NUMFILAS*Mesa.NUMCOLUMNAS + "]: ");
             if (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS) System.err.println("Se esperaba un número [1 - " + Mesa.NUMFILAS*Mesa.NUMCOLUMNAS + "]" + "\n");
         }
         return new Position(--i/Mesa.NUMFILAS, i%Mesa.NUMFILAS);
     }
-    private static Position selectAnyPosition() {
+    private static Position selectDestination() {
         int i = 0;
         while (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) {
-            i = ES.pideNumero("\nIntroduczca el monton [1 - " + (Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) + "]: ");
+            i = ES.pideNumero("\nIntroduczca el monton al que se moverá la carta [1 - " + (Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) + "]: ");
             if (i < 1 || i > Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) System.err.println("Se esperaba un número [1 - " + (Mesa.NUMFILAS*Mesa.NUMCOLUMNAS+Palos.values().length) + "]" + "\n");
         }
         return new Position(--i/Mesa.NUMFILAS, i%Mesa.NUMFILAS);
@@ -43,8 +43,8 @@ public class Solitario {
         
         while(Mesa.status == Mesa.Status.DEFAULT){
             try {
-                Position take = selectInnerPosition();
-                Position drop = selectAnyPosition();
+                Position take = selectOrigin();
+                Position drop = selectDestination();
                 Carta carta = jugador.takeCarta(mesa, take);
                 try {
                     jugador.pushCarta(mesa, carta, drop);
