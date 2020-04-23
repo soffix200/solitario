@@ -11,10 +11,6 @@ package solitario.Core;
  * @author Victor Figueroa Maceira
  */
 public class Jugador {
-
-    public Jugador() {
-        
-    }
     
     public Carta takeCarta(Mesa mesa, Position pos) throws Exception {
         return mesa.popCarta(pos);
