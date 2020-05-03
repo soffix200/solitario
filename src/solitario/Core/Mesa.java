@@ -128,7 +128,7 @@ public class Mesa {
     }
        
     public void evaluateGame() {
-        if (getOutterCardCount() == 40){
+        if (getOutterCardCount() == Baraja.NUMCARTAS){
             status = Status.WIN;
         } else if (!areActionsPossible()) {
             status = Status.LOSE;
