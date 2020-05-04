@@ -104,7 +104,7 @@ public class Mesa {
             }
         } else { // Si destination es interior
             if (montonesInteriores[pos.getI()][pos.getJ()].isEmpty()) {
-                System.err.println("No se pueden mover cartas a montones vacíos en el interior del tablero");
+                throw new Exception("No se pueden mover cartas a montones vacíos en el interior del tablero");
             } else {
                 if ((montonesInteriores[pos.getI()][pos.getJ()].peek().getNumero() == carta.getNumero() + 1) && (montonesInteriores[pos.getI()][pos.getJ()].peek().getPalo() == carta.getPalo())) {
                     montonesInteriores[pos.getI()][pos.getJ()].push(carta);
