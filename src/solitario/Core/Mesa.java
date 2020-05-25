@@ -33,7 +33,7 @@ import java.util.Stack;
 public class Mesa {
     
     public static enum Status {DEFAULT, WIN, LOSE};
-    public static Status status = Status.DEFAULT;
+    public static Status status;
     
     public static final int NUMFILAS = 4;
     public static final int NUMCOLUMNAS = 4;
@@ -42,6 +42,7 @@ public class Mesa {
     private Stack<Carta>[] montonesExteriores;
     
     public Mesa(){
+        status = Status.DEFAULT;
         montonesInteriores = new Stack[NUMFILAS][NUMCOLUMNAS];
         for (int i = 0; i < NUMFILAS; i++){
             for (int j = 0; j < NUMCOLUMNAS; j++){
@@ -119,7 +120,7 @@ public class Mesa {
         montonesInteriores[pos.getI()][pos.getJ()].push(carta);
     }
     
-    public int getOutterCardCount() {
+    private int getOutterCardCount() {
         int toret = 0;
         for (Stack<Carta> monton : montonesExteriores) {
             toret += monton.size();
@@ -189,7 +190,7 @@ public class Mesa {
     } 
     
     
-    public String rowToString(int i){
+    private String rowToString(int i){
         StringBuilder toret = new StringBuilder();
         // LINE 1
         toret.append("\n==");
