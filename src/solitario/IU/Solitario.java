@@ -59,9 +59,18 @@ public class Solitario {
             System.out.println(mesa);
         }
                 
-        if (Mesa.status == Mesa.Status.WIN){
-            System.out.println("ENHORABUENA, HAS GANADO!!");
-        } else System.out.println("HAS PERDIDO, VUELVE A INTENTRLO!!");
+        switch (Mesa.status) {
+            case WIN:
+                System.out.println("ENHORABUENA, HAS GANADO!!");
+                break;
+            case ALMOSTWIN:
+                System.out.println("ÁNIMO, VUELVE A INTENTRLO!!");
+                break;
+            case LOSE:
+                System.out.println("HAS PERDIDO, VUELVE A INTENTRLO!!");
+                break;
+        }
+        
     }
 
 }

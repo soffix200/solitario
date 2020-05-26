@@ -32,7 +32,7 @@ import java.util.Stack;
  */
 public class Mesa {
     
-    public static enum Status {DEFAULT, WIN, LOSE};
+    public static enum Status {DEFAULT, WIN, ALMOSTWIN, LOSE};
     public static Status status;
     
     public static final int NUMFILAS = 4;
@@ -70,6 +70,11 @@ public class Mesa {
                 emplaceCarta(baraja.popCarta(), new Position(i,i));
                 emplaceCarta(baraja.popCarta(), new Position(i, NUMFILAS-i-1));
             }
+            // Se colocan las segundas 8 cartas de las diagonales
+            for (int i = 0; i < NUMFILAS; i++) {
+                emplaceCarta(baraja.popCarta(), new Position(i,i));
+                emplaceCarta(baraja.popCarta(), new Position(i, NUMFILAS-i-1));
+            }
             // Se colocan las 16 últimas cartas (4x4)
             for (int i = 0; i < NUMFILAS; i++) {
                 for (int j = 0; j < NUMCOLUMNAS; j++) {
@@ -91,13 +96,13 @@ public class Mesa {
     public void pushCarta(Carta carta, Position pos) throws Exception {
         if (pos.getI() >= NUMFILAS) { // Si destination es exterior
             if (montonesExteriores[pos.getJ()].isEmpty()) {
-                if (carta.getNumero() == 1) {
+                if (carta.getNumero() == Baraja.NUMCARTAS/Palos.values().length) {
                     montonesExteriores[pos.getJ()].push(carta);
                 } else {
-                    throw new Exception("No se puede mover una carta distinta de 1 a un montón exterior vacío");
+                    throw new Exception("No se puede mover una carta distinta de " + Baraja.NUMCARTAS/Palos.values().length + " a un montón exterior vacío");
                 }
             } else {
-                if ((montonesExteriores[pos.getJ()].peek().getNumero() == carta.getNumero() - 1) && (montonesExteriores[pos.getJ()].peek().getPalo() == carta.getPalo())) {
+                if ((montonesExteriores[pos.getJ()].peek().getNumero() == carta.getNumero() + 1) && (montonesExteriores[pos.getJ()].peek().getPalo() == carta.getPalo())) {
                     montonesExteriores[pos.getJ()].push(carta);
                 } else {
                     throw new Exception("La carta no se puede mover al montón indicado");
@@ -107,7 +112,7 @@ public class Mesa {
             if (montonesInteriores[pos.getI()][pos.getJ()].isEmpty()) {
                 throw new Exception("No se pueden mover cartas a montones vacíos en el interior del tablero");
             } else {
-                if ((montonesInteriores[pos.getI()][pos.getJ()].peek().getNumero() == carta.getNumero() + 1) && (montonesInteriores[pos.getI()][pos.getJ()].peek().getPalo() == carta.getPalo())) {
+                if ((montonesInteriores[pos.getI()][pos.getJ()].peek().getNumero() == carta.getNumero() - 1) && (montonesInteriores[pos.getI()][pos.getJ()].peek().getPalo() == carta.getPalo())) {
                     montonesInteriores[pos.getI()][pos.getJ()].push(carta);
                 } else {
                     throw new Exception("La carta no se puede mover al montón indicado");
@@ -120,7 +125,7 @@ public class Mesa {
         montonesInteriores[pos.getI()][pos.getJ()].push(carta);
     }
     
-    private int getOutterCardCount() {
+    public int getOutterCardCount() {
         int toret = 0;
         for (Stack<Carta> monton : montonesExteriores) {
             toret += monton.size();
@@ -132,7 +137,9 @@ public class Mesa {
         if (getOutterCardCount() == Baraja.NUMCARTAS){
             status = Status.WIN;
         } else if (!areActionsPossible()) {
-            status = Status.LOSE;
+            if (getOutterCardCount() > Baraja.NUMCARTAS/2)
+                status = Status.ALMOSTWIN;
+            else status = Status.LOSE;
         }
     }
     
@@ -147,10 +154,10 @@ public class Mesa {
                     try {
                         if (!montonesInteriores[i][j].isEmpty()){
                             if (montonesExteriores[h].isEmpty()){
-                                if (montonesInteriores[i][j].peek().getNumero() == 1){
+                                if (montonesInteriores[i][j].peek().getNumero() == Baraja.NUMCARTAS/Palos.values().length){
                                     possible = true;
                                 }
-                            } else if (montonesExteriores[h].peek().getNumero() + 1 == montonesInteriores[i][j].peek().getNumero()) {
+                            } else if (montonesExteriores[h].peek().getNumero() - 1 == montonesInteriores[i][j].peek().getNumero()) {
                                 if (montonesExteriores[h].peek().getPalo() == montonesInteriores[i][j].peek().getPalo()){
                                     possible = true;
                                 }
@@ -168,7 +175,7 @@ public class Mesa {
                         try {
                             if (!montonesInteriores[i][j].isEmpty()){
                                 if (!montonesInteriores[k][l].isEmpty()) {
-                                    if (montonesInteriores[k][l].peek().getNumero() - 1 == montonesInteriores[i][j].peek().getNumero()) {
+                                    if (montonesInteriores[k][l].peek().getNumero() + 1 == montonesInteriores[i][j].peek().getNumero()) {
                                         if (montonesInteriores[k][l].peek().getPalo() == montonesInteriores[i][j].peek().getPalo()){
                                             possible = true;
                                         }

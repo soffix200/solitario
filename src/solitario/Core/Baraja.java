@@ -15,7 +15,7 @@ import java.util.Stack;
  */
 public class Baraja {
     
-    public static final int NUMCARTAS = 40;
+    public static final int NUMCARTAS = 48;
     
     private Stack<Carta> cartas;
     

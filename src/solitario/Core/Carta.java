@@ -29,8 +29,7 @@ public class Carta {
     public String toString(){
         StringBuilder toret = new StringBuilder();
         toret.append("[");
-        if (getNumero() > 7) toret.append(getNumero()+2);
-        else toret.append(getNumero());
+        toret.append(getNumero());
         toret.append(" | ").append(getPalo()).append("]");
         return toret.toString();
     }
